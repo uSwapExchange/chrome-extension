@@ -1,0 +1,147 @@
+{
+  "actionType": "transfer_cashapp",
+  "proofEngine": "reclaim",
+  "authLink": "https://cash.app/account/activity",
+  "url": "https://cash.app/cash-app/activity/v1.0/page",
+  "method": "POST",
+  "body": "{\"activity_token\":{\"activity_token_type\":\"CUSTOMER_TOKEN\",\"token\":\"{{SENDER_ID}}\"},\"activity_scope\":\"MY_ACTIVITY_WEB_V2\",\"page_size\":15,\"request_context\":{}}",
+  "metadata": {
+    "platform": "cashapp",
+    "urlRegex": "https://cash.app/cash-app/activity/v1.0/page",
+    "method": "POST",
+    "fallbackUrlRegex": "",
+    "fallbackMethod": "",
+    "preprocessRegex": "",
+    "transactionsExtraction": {
+      "transactionJsonPathListSelector": "$.activity_rows",
+      "transactionJsonPathSelectors": {
+        "recipient": "$.payment_history_inputs_row.recipient.cashtag",
+        "amount": "$.payment_history_inputs_row.payment.amount.amount",
+        "date": "$.payment_history_inputs_row.payment.display_date",
+        "paymentId": "$.payment_history_inputs_row.payment.history_data.transaction_id",
+        "currency": "$.payment_history_inputs_row.payment.amount.currency_code"
+      }
+    },
+    "proofMetadataSelectors": [
+      {
+        "type": "jsonPath",
+        "value": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.amount.amount"
+      },
+      {
+        "type": "jsonPath",
+        "value": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.amount.currency_code"
+      },
+      {
+        "type": "jsonPath",
+        "value": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.history_data.transaction_id"
+      },
+      {
+        "type": "jsonPath",
+        "value": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.recipient.cashtag"
+      }
+    ]
+  },
+  "paramNames": [
+    "SENDER_ID"
+  ],
+  "paramSelectors": [
+    {
+      "type": "jsonPath",
+      "value": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.sender_id"
+    }
+  ],
+  "skipRequestHeaders": [
+    "Cookie",
+    "x-csrf-token",
+    "x-device-name",
+    "x-request-signature",
+    "x-request-uuid",
+    "cash-web-request",
+    "x-web-device-info",
+    "x-web-context",
+    "x-bt-id"
+  ],
+  "secretHeaders": [
+    "Cookie",
+    "x-csrf-token",
+    "x-device-name",
+    "x-request-signature",
+    "x-request-uuid",
+    "cash-web-request",
+    "x-web-device-info",
+    "x-web-context",
+    "x-bt-id"
+  ],
+  "responseMatches": [
+    {
+      "type": "regex",
+      "value": "\"amount\":(?<amount>[0-9]+)"
+    },
+    {
+      "type": "regex",
+      "value": "\"currency_code\":\"(?<currency_code>[^\"]+)\""
+    },
+    {
+      "type": "regex",
+      "value": "\"display_date\":(?<date>[0-9]+)"
+    },
+    {
+      "type": "regex",
+      "value": "\"cashtag\":\"(?<receiverId>[^\"]+)\""
+    },
+    {
+      "type": "regex",
+      "value": "\"transaction_id\":\"(?<paymentId>[^\"]+)\""
+    },
+    {
+      "type": "regex",
+      "value": "\"state\":\"(?<state>[^\"]+)\""
+    }
+  ],
+  "responseRedactions": [
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.amount.amount",
+      "xPath": ""
+    },
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.amount.currency_code",
+      "xPath": ""
+    },
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.display_date",
+      "xPath": ""
+    },
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.recipient.cashtag",
+      "xPath": ""
+    },
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.history_data.transaction_id",
+      "xPath": ""
+    },
+    {
+      "jsonPath": "$.activity_rows[{{INDEX}}].payment_history_inputs_row.payment.state",
+      "xPath": ""
+    }
+  ],
+  "mobile": {
+    "includeAdditionalCookieDomains": [],
+    "additionalClientOptions": {
+      "cipherSuites": [
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256"
+      ]
+    },
+    "useExternalAction": true,
+    "userAgent": {
+      "android": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15",
+      "ios": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
+    },
+    "external": {
+      "actionLink": "https://cash.app/{{RECIPIENT_ID}}/{{AMOUNT}}",
+      "appStoreLink": "https://apps.apple.com/us/app/cash-app-mobile-banking/id711923939",
+      "playStoreLink": "https://play.google.com/store/apps/details?id=com.squareup.cash"
+    }
+  }
+}
