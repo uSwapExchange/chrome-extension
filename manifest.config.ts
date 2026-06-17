@@ -142,7 +142,7 @@ export default defineManifest({
   web_accessible_resources: webAccessibleResources,
   content_scripts: [
     {
-      // ISOLATED relay only. window.peer is defined by the APP (packages/web),
+      // ISOLATED relay only. window.peer is defined by the uSwap web app,
       // not injected here — it talks to this relay (tab) or the side-panel page
       // (panel) over postMessage. No MAIN-world content script, no injection;
       // identical on Chrome and Firefox.

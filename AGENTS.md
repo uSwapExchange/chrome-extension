@@ -30,7 +30,7 @@ Chrome-only feature to ship.
 ## window.peer transport — two paths, one contract
 
 The page contract is `window.peer` (per Peer's build-your-own-extension spec).
-**The APP owns `window.peer` (`reference/window-peer-bridge.ts`) — the
+**The APP owns `window.peer` (defined by the uSwap web app) — the
 extension never injects it.** No MAIN-world content script, no script injection,
 no eval — identical mechanism on Chrome and Firefox (this is what keeps AMO's
 linter clean). The app installs `window.peer` only after a valid handshake, so a
@@ -39,7 +39,7 @@ Two transports, picked by whether the app is top-level or embedded:
 
 ### A. App in a normal tab (`app.uswap.net`)
 ```
-window.peer (app-owned)    reference/window-peer-bridge.ts (app-side, incl. for reference)
+window.peer (app-owned)    defined by the uSwap web app
   ⇅ window.postMessage (same window)
 relay (ISOLATED world)     src/content/peer-relay.content.ts
   ⇅ chrome.runtime sendMessage + long-lived Port
@@ -59,7 +59,7 @@ background
 
 ### B. App in the extension panel (side panel / sidebar)
 ```
-window.peer (parent bridge)   reference/window-peer-bridge.ts (app-side, incl. for reference)
+window.peer (parent bridge)   defined by the uSwap web app
   ⇅ window.postMessage to window.parent
 panel relay                   src/sidepanel/peer-bridge.ts
   ⇅ chrome.runtime sendMessage + long-lived Port

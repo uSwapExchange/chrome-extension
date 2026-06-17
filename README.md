@@ -53,7 +53,7 @@ TAB: page (window.peer, MAIN world)   src/content/peer-page-api.main.ts
      relay (ISOLATED world)           src/content/peer-relay.content.ts
        ⇅ chrome.runtime sendMessage + long-lived Port (per-connection event push)
 
-PANEL: app (window.peer parent bridge)  reference/window-peer-bridge.ts (app-side, incl. for reference)
+PANEL: app (window.peer parent bridge)  defined by the uSwap web app
   ⇅ window.postMessage to parent panel
      panel relay                      src/sidepanel/peer-bridge.ts
        ⇅ chrome.runtime sendMessage + long-lived Port
