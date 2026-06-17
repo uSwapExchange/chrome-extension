@@ -3,6 +3,34 @@
 Guidance for agents working in this repo. Read this before
 touching the manifest, the bus, content scripts, or the panel.
 
+## ⚠️ Open-source boundary — never leak the codebase
+
+**This repository is PUBLIC (MIT).** It is a one-way mirror of a single package
+from the private uSwap monorepo. The rest of the uSwap codebase — the matching
+engine, routing, providers, backend — is the **private moat and must NEVER
+appear here in any form**. A leak of the engine source is unrecoverable.
+
+When syncing/publishing into this repo:
+
+- **Only the extension package's own files belong here** — its source, manifest,
+  build config, README/AGENTS, tests, icons. **Never copy a file from another
+  package** (web app, API, shared, …) — not even "for reference." If something
+  like the page-side `window.peer` contract needs documenting, write a fresh
+  description here; never paste private source.
+- **Exclude:** listing/store/AMO-submission folders, build artifacts (`dist/`,
+  `*.zip`), screenshots, and any internal design/ops docs.
+- **Before every push, diff against `main` and grep the whole tree for:**
+  references to other workspace packages (`@uswap/*`, `packages/*`), internal
+  infrastructure (hostnames, IPs, deploy/control-plane), RPC/provider names and
+  backend/engine vocabulary, credentials/keys/secrets, and any non-public URL.
+  Any hit → stop and remove it. (Enumerate the actual private terms from the
+  monorepo you're syncing from — they are deliberately NOT listed here so this
+  file stays safe to publish.)
+
+The extension's *legitimate* public surface is only: the side panel, the message
+bus, payment-capture (the public Peer/zkp2p integration), consent, and storage.
+**When in doubt, leave it out.**
+
 ## Prime directive: full feature parity across Chrome and Firefox
 
 **One source tree, two MV3 targets. Every user-facing feature MUST work
